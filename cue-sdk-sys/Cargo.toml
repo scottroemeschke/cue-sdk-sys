@@ -1,0 +1,22 @@
+[package]
+name = "cue-sdk-sys"
+version = "0.0.1"
+authors = ["Scott Meschke <scottmeschke@gmail.com>", "Zach Thomas <zdcthomas@yahoo.com>"]
+license = "MIT"
+repository = "https://github.com/scottroemeschke/cue-sdk-sys"
+homepage = "https://github.com/scottroemeschke/cue-sdk-sys"
+documentation = "https://docs.rs/cue-sdk_sys"
+keywords = ["led", "bindings", "corsair", "icue", "cue"]
+readme = "README.md"
+description = """
+FFI Bindings for the Corsair iCUE SDK.
+"""
+build = "build.rs"
+edition = "2018"
+links = "CUESDK"
+categories = ["external-ffi-bindings"]
+
+[lib]
+name = "cue_sdk_sys"
+
+[dependencies]

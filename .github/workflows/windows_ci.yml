@@ -1,0 +1,101 @@
+on: [push, pull_request]
+
+name: Windows-CI
+
+jobs:
+  sdk_version_env_vars:
+    name: Set SDK Version Environment Variables
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dlip/envy.sh@v2.3.7
+        with:
+          input-file: cue_sdk_version.env
+
+  check:
+    name: Check
+    needs: sdk_version_env_vars
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: check
+
+  test:
+    name: Test Suite
+    needs: [sdk_version_env_vars, download-and-store-cuesdk-windows-release]
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: actions/download-artifact@v2
+          with:
+            name: sdk
+            path: /sdk_release/
+      - run: Set-ItemProperty -path HKCU:\Environment\ -Name Path -Value "$((Get-ItemProperty -path HKCU:\Environment\ -Name Path).Path);/$pwd/sdk_release/CUESDK/redist
+        shell: powershell
+      - run: $env:CUE_SDK_LIB_FILES_PATH=$pwd/sdk_release/CUESDK/lib
+        shell: powershell
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+
+  fmt:
+    name: Rustfmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - run: rustup component add rustfmt
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+  clippy:
+    name: Clippy
+    needs: sdk_version_env_vars
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - run: rustup component add clippy
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
+
+  download-and-store-cuesdk-windows-release:
+    name: Download Windows Release
+    needs: sdk_version_env_vars
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download
+        uses: Legion2/download-release-action@v2.1.0
+        with:
+          repository: CorsairOfficial/cue-sdk
+          tag: v${{env.CUE_SDK_VERSION}}
+          path: sdk_release
+          file: CUESDK_${{env.CUE_SDK_VERSION}}.zip
+      - uses: actions/upload-artifact@v2
+        with:
+          name: sdk
+          path: /sdk_release/

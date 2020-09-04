@@ -1,0 +1,2 @@
+[workspace]
+members = ["cue-sdk-sys", "sys-test"]

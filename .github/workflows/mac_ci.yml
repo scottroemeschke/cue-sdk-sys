@@ -1,0 +1,71 @@
+on: [push, pull_request]
+
+name: MacOS-CI
+
+jobs:
+  download-and-upload-artifact-cuesdk-macos-release:
+    name: Download MacOS Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: set cue sdk version env var
+        run: |
+          export $(egrep -v '^#' cue_sdk_version | xargs)
+          eval echo "::set-env name=CUE_SDK_VERSION::$CUE_SDK_VERSION"
+      - name: Download release
+        uses: Legion2/download-release-action@v2.1.0
+        with:
+          repository: CorsairOfficial/cue-sdk
+          tag: ${{ format('v{0}', env.CUE_SDK_VERSION) }}
+          path: sdk_release
+          file: ${{ format('CUESDK_{0}.dmg', env.CUE_SDK_VERSION) }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: sdk_dmg
+          path: ${{ format('sdk_release/CUESDK_{0}.dmg', env.CUE_SDK_VERSION) }}
+
+  mount-release-dmg-and-upload-contents-artifact:
+    name: Mount and Upload Release DMG Contents as Artifact
+    needs: download-and-upload-artifact-cuesdk-macos-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: set cue sdk version env var
+        run: |
+          export $(egrep -v '^#' cue_sdk_version | xargs)
+          eval echo "::set-env name=CUE_SDK_VERSION::$CUE_SDK_VERSION"
+      - uses: actions/download-artifact@v2
+        with:
+          name: sdk_dmg
+          path: ${{ format('sdk_release/CUESDK_{0}.dmg', env.CUE_SDK_VERSION) }}
+      - name: Mount and Copy Framework
+        run: |
+          atc=$(eval echo '7z x -osdk sdk_release/CUESDK_${CUE_SDK_VERSION}.dmg')
+          eval $atc
+      - uses: actions/upload-artifact@v2
+        with:
+          name: sdk_release
+          path: sdk/
+
+  test:
+    name: Test Suite
+    needs: mount-release-dmg-and-upload-contents-artifact
+    runs-on: macos-10.15
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: sdk_release
+          path: sdk
+      - name: Set env for CUE_SDK_FRAMEWORK_PATH
+        run: |
+          se=$(eval echo '::set-env name=CUE_SDK_FRAMEWORK_PATH::$PWD/sdk/CUESDK')
+          echo $se
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test

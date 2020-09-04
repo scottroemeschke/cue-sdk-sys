@@ -1,0 +1,7 @@
+[package]
+name = "sys-test"
+version = "0.0.1"
+edition = "2018"
+
+[dependencies]
+cue-sdk-sys = { path = "../cue-sdk-sys"}
