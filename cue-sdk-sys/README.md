@@ -1,5 +1,9 @@
 # cue-sdk-sys
 
+![GithubRepo](https://img.shields.io/badge/github-scottroemeschke%2Fcue--sdk--sys-darkblue?style=flat)
+![CratesIO](https://img.shields.io/crates/v/cue-sdk-sys)
+![DocsRS](https://img.shields.io/badge/docs.rs-cue--sdk--sys-blue?style=flat)
+
 The `cue-sdk-sys` crate is a low-level unsafe Rust bindings to the native [Corsair iCUE SDK](https://github.com/CorsairOfficial/cue-sdk).
 
 # Source Generation Process
