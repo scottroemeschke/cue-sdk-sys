@@ -2269,48 +2269,46 @@ fn bindgen_test_layout_CorsairKeyEvent() {
 #[derive(Copy, Clone)]
 pub struct CorsairEvent {
     pub id: CorsairEventId,
-    pub __bindgen_anon_1: CorsairEvent__bindgen_ty_1,
+    pub event_union: CorsairEventUnion,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
-pub union CorsairEvent__bindgen_ty_1 {
+pub union CorsairEventUnion {
     pub deviceConnectionStatusChangedEvent: *const CorsairDeviceConnectionStatusChangedEvent,
     pub keyEvent: *const CorsairKeyEvent,
     _bindgen_union_align: u64,
 }
 #[test]
-fn bindgen_test_layout_CorsairEvent__bindgen_ty_1() {
+fn bindgen_test_layout_CorsairEvent__CorsairEventUnion() {
     assert_eq!(
-        ::std::mem::size_of::<CorsairEvent__bindgen_ty_1>(),
+        ::std::mem::size_of::<CorsairEventUnion>(),
         8usize,
-        concat!("Size of: ", stringify!(CorsairEvent__bindgen_ty_1))
+        concat!("Size of: ", stringify!(CorsairEventUnion))
     );
     assert_eq!(
-        ::std::mem::align_of::<CorsairEvent__bindgen_ty_1>(),
+        ::std::mem::align_of::<CorsairEventUnion>(),
         8usize,
-        concat!("Alignment of ", stringify!(CorsairEvent__bindgen_ty_1))
+        concat!("Alignment of ", stringify!(CorsairEventUnion))
     );
     assert_eq!(
         unsafe {
-            &(*(::std::ptr::null::<CorsairEvent__bindgen_ty_1>()))
-                .deviceConnectionStatusChangedEvent as *const _ as usize
+            &(*(::std::ptr::null::<CorsairEventUnion>())).deviceConnectionStatusChangedEvent
+                as *const _ as usize
         },
         0usize,
         concat!(
             "Offset of field: ",
-            stringify!(CorsairEvent__bindgen_ty_1),
+            stringify!(CorsairEventUnion),
             "::",
             stringify!(deviceConnectionStatusChangedEvent)
         )
     );
     assert_eq!(
-        unsafe {
-            &(*(::std::ptr::null::<CorsairEvent__bindgen_ty_1>())).keyEvent as *const _ as usize
-        },
+        unsafe { &(*(::std::ptr::null::<CorsairEventUnion>())).keyEvent as *const _ as usize },
         0usize,
         concat!(
             "Offset of field: ",
-            stringify!(CorsairEvent__bindgen_ty_1),
+            stringify!(CorsairEventUnion),
             "::",
             stringify!(keyEvent)
         )
@@ -2339,6 +2337,7 @@ fn bindgen_test_layout_CorsairEvent() {
         )
     );
 }
+
 pub type CorsairEventHandler =
     ::std::option::Option<unsafe extern "C" fn(context: *mut c_void, event: *const CorsairEvent)>;
 
