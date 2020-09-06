@@ -12,3 +12,7 @@ Initial release for CUE SDK version 3.0.55
 ## [v0.0.2]
 ### Changed
 - (BREAKING CHANGE) Renamed union field in `CorsairEvent` from a generated `bindgen` name, to `CorsairEventUnion`.
+
+## [v0.0.3]
+### Fixed
+- Updated README badge links.
