@@ -2,7 +2,7 @@
 # It is not intended for manual editing.
 [[package]]
 name = "cue-sdk-sys"
-version = "0.0.1"
+version = "0.0.2"
 
 [[package]]
 name = "sys-test"
