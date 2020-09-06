@@ -1,6 +1,6 @@
 [package]
 name = "cue-sdk-sys"
-version = "0.0.2"
+version = "0.0.3"
 authors = ["Scott Meschke <scottmeschke@gmail.com>", "Zach Thomas <zdcthomas@yahoo.com>"]
 license = "MIT"
 repository = "https://github.com/scottroemeschke/cue-sdk-sys"
