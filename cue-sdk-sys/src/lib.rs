@@ -1664,7 +1664,6 @@ pub type CorsairEventId = u32;
 pub const CORSAIR_DEVICE_ID_MAX: c_uint = 128;
 pub type CorsairDeviceId = [c_char; 128usize];
 
-//c_unit
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct CorsairChannelDeviceInfo {
@@ -1706,6 +1705,10 @@ fn bindgen_test_layout_CorsairChannelDeviceInfo() {
         )
     );
 }
+
+unsafe impl Send for CorsairChannelInfo {}
+unsafe impl Sync for CorsairChannelInfo {}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct CorsairChannelInfo {
@@ -1758,6 +1761,10 @@ fn bindgen_test_layout_CorsairChannelInfo() {
         )
     );
 }
+
+unsafe impl Send for CorsairChannelsInfo {}
+unsafe impl Sync for CorsairChannelsInfo {}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct CorsairChannelsInfo {
@@ -1799,6 +1806,10 @@ fn bindgen_test_layout_CorsairChannelsInfo() {
         )
     );
 }
+
+unsafe impl Send for CorsairDeviceInfo {}
+unsafe impl Sync for CorsairDeviceInfo {}
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct CorsairDeviceInfo {
@@ -1978,6 +1989,10 @@ fn bindgen_test_layout_CorsairLedPosition() {
         )
     );
 }
+
+unsafe impl Send for CorsairLedPositions {}
+unsafe impl Sync for CorsairLedPositions {}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct CorsairLedPositions {
@@ -2080,6 +2095,10 @@ fn bindgen_test_layout_CorsairLedColor() {
         )
     );
 }
+
+unsafe impl Send for CorsairProtocolDetails {}
+unsafe impl Sync for CorsairProtocolDetails {}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct CorsairProtocolDetails {
@@ -2271,6 +2290,10 @@ pub struct CorsairEvent {
     pub id: CorsairEventId,
     pub event_union: CorsairEventUnion,
 }
+
+unsafe impl Send for CorsairEventUnion {}
+unsafe impl Sync for CorsairEventUnion {}
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union CorsairEventUnion {
