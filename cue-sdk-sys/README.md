@@ -14,6 +14,7 @@ The follow describes the steps taken to generate the source code, and what manua
 2. Combine function calls into a single `extern` block.
 3. Add `#[must_use]` to functions which return boolean "success" values.
 4. Import rust FFI types.
+5. Add `Send` and `Sync` traits to non-auto send/sync structs since the iCUE SDK documentation shares that the SDK is thread-safe.
 
 # Building
 

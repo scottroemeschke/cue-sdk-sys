@@ -16,3 +16,7 @@ Initial release for CUE SDK version 3.0.55
 ## [v0.0.3]
 ### Fixed
 - Updated README badge links.
+
+## [v0.0.4]
+### Changed
+- All structs (including those with pointers and not just values) are now `Send` and `Sync` as suggested from the iCUE SDK documentation.
