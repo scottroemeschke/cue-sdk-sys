@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v0.0.1]
 
-Initial release for CUE SDK version 3.0.55
+Initial release for CUE SDK version [3.0.355](https://github.com/CorsairOfficial/cue-sdk/releases/tag/v3.0.355).
 
 ## [v0.0.2]
 ### Changed
@@ -20,3 +20,7 @@ Initial release for CUE SDK version 3.0.55
 ## [v0.0.4]
 ### Changed
 - All structs (including those with pointers and not just values) are now `Send` and `Sync` as suggested from the iCUE SDK documentation.
+
+## [v0.0.5]
+### Changed
+- Updated CUE SDK to version [3.0.361](https://github.com/CorsairOfficial/cue-sdk/releases/tag/v3.0.361).
