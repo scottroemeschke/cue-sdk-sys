@@ -105,4 +105,97 @@ mod tests {
             "CorsairDisconnect returned error: {err}",
         );
     }
+
+    /// Diagnostic test for macOS SIGBUS (issue #12).
+    ///
+    /// Performs a connect → disconnect → reconnect → disconnect cycle using the
+    /// **same** callback context pointer for both sessions. The context (`shared`)
+    /// lives on the stack for the entire test — it is never freed between cycles.
+    ///
+    /// - If this test SIGBUS-es → the SDK itself can't handle reconnect on macOS
+    ///   (upstream bug).
+    /// - If this test passes → the SIGBUS in cue-sdk-rust is caused by freeing the
+    ///   callback context (`Pin<Box<Sender>>`) before the SDK's background thread
+    ///   is done with it (context lifetime issue).
+    #[test]
+    fn reconnect_sigbus_diagnostic() {
+        let shared = Mutex::new(CallbackState { states: Vec::new() });
+        let context = &shared as *const Mutex<CallbackState> as *mut core::ffi::c_void;
+
+        // ---- Session 1: connect, wait for timeout, disconnect ----
+
+        eprintln!("[reconnect diag] session 1: connect");
+        let err = unsafe { CorsairConnect(Some(on_state_changed), context) };
+        assert_eq!(err, CorsairError_CE_Success, "session 1 connect: {err}");
+
+        eprintln!("[reconnect diag] session 1: waiting for timeout");
+        std::thread::sleep(std::time::Duration::from_millis(1500));
+        {
+            let guard = shared.lock().unwrap();
+            eprintln!(
+                "[reconnect diag] session 1: callback states = {:?}",
+                guard.states
+            );
+        }
+
+        eprintln!("[reconnect diag] session 1: disconnect");
+        let err = unsafe { CorsairDisconnect() };
+        assert_eq!(err, CorsairError_CE_Success, "session 1 disconnect: {err}");
+
+        // Verify CSS_Closed was delivered synchronously per SDK docs.
+        {
+            let guard = shared.lock().unwrap();
+            assert!(
+                guard.states.contains(&CorsairSessionState_CSS_Closed),
+                "Expected CSS_Closed after disconnect, got: {:?}",
+                guard.states,
+            );
+            eprintln!(
+                "[reconnect diag] session 1: final states = {:?}",
+                guard.states
+            );
+        }
+
+        // Clear state for session 2.
+        shared.lock().unwrap().states.clear();
+
+        // ---- Session 2: reconnect, wait for timeout, disconnect ----
+
+        eprintln!("[reconnect diag] session 2: connect (reconnect)");
+        let err = unsafe { CorsairConnect(Some(on_state_changed), context) };
+        assert_eq!(err, CorsairError_CE_Success, "session 2 connect: {err}");
+
+        eprintln!("[reconnect diag] session 2: details");
+        let mut details = unsafe { std::mem::zeroed::<CorsairSessionDetails>() };
+        let err = unsafe { CorsairGetSessionDetails(&mut details) };
+        assert_eq!(err, CorsairError_CE_Success, "session 2 get details: {err}",);
+        assert_eq!(details.clientVersion.major, 4);
+
+        eprintln!("[reconnect diag] session 2: waiting for timeout");
+        std::thread::sleep(std::time::Duration::from_millis(1500));
+        {
+            let guard = shared.lock().unwrap();
+            eprintln!(
+                "[reconnect diag] session 2: callback states = {:?}",
+                guard.states
+            );
+        }
+
+        eprintln!("[reconnect diag] session 2: disconnect");
+        let err = unsafe { CorsairDisconnect() };
+        assert_eq!(err, CorsairError_CE_Success, "session 2 disconnect: {err}");
+
+        {
+            let guard = shared.lock().unwrap();
+            eprintln!(
+                "[reconnect diag] session 2: final states = {:?}",
+                guard.states
+            );
+        }
+
+        eprintln!("[reconnect diag] all steps passed — context still alive on stack");
+        // `shared` is dropped here at end of test. If the process crashes
+        // after this point, the SDK's background thread is still accessing
+        // the context during process teardown.
+    }
 }
