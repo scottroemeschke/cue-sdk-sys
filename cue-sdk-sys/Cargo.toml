@@ -1,6 +1,6 @@
 [package]
 name = "cue-sdk-sys"
-version = "0.0.5"
+version = "0.1.0"
 authors = ["Scott Meschke <scottmeschke@gmail.com>", "Zach Thomas <zdcthomas@yahoo.com>"]
 license = "MIT"
 repository = "https://github.com/scottroemeschke/cue-sdk-sys"
@@ -12,8 +12,8 @@ description = """
 FFI Bindings for the Corsair iCUE SDK.
 """
 build = "build.rs"
-edition = "2018"
-links = "CUESDK"
+edition = "2021"
+links = "iCUESDK"
 categories = ["external-ffi-bindings"]
 
 [lib]
