@@ -94,7 +94,9 @@ jobs:
           hdiutil detach /Volumes/iCUESDK
 
       - name: Set SDK environment
-        run: echo "CUE_SDK_FRAMEWORK_PATH=${{ github.workspace }}/sdk_framework" >> "$GITHUB_ENV"
+        run: |
+          echo "CUE_SDK_FRAMEWORK_PATH=${{ github.workspace }}/sdk_framework" >> "$GITHUB_ENV"
+          echo "DYLD_FRAMEWORK_PATH=${{ github.workspace }}/sdk_framework" >> "$GITHUB_ENV"
 
       - name: Run tests
         run: cargo test -p sys-test
