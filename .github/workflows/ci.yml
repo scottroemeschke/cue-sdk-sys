@@ -64,7 +64,7 @@ jobs:
           echo "${{ github.workspace }}/sdk/iCUESDK/redist/x64" >> "$GITHUB_PATH"
 
       - name: Run tests
-        run: cargo test -p sys-test
+        run: cargo test -p sys-test -- --test-threads=1
 
   test-macos:
     name: Test (macOS)
@@ -99,4 +99,4 @@ jobs:
           echo "DYLD_FRAMEWORK_PATH=${{ github.workspace }}/sdk_framework" >> "$GITHUB_ENV"
 
       - name: Run tests
-        run: cargo test -p sys-test
+        run: cargo test -p sys-test -- --test-threads=1
