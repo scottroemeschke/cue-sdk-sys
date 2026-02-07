@@ -17,7 +17,11 @@ mod tests {
 
             // clientVersion is always populated, even without a connection
             let cv = details.clientVersion;
-            assert_eq!(cv.major, 4, "Expected SDK major version 4, got {}", cv.major);
+            assert_eq!(
+                cv.major, 4,
+                "Expected SDK major version 4, got {}",
+                cv.major
+            );
         }
     }
 }

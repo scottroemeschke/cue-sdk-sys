@@ -1,20 +1,42 @@
-name: Publish-Crate
+name: Publish
 
 on:
-  release:
-    types: [created]
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
 
 jobs:
-  publish-crates:
+  publish:
+    name: Release & Publish
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Rust
-        uses: hecrj/setup-rust-action@v1
-      - uses: actions/checkout@v2
-      - name: Publish to crates.io
-        if: env.CRATES_TOKEN
+      - uses: actions/checkout@v4
+
+      - name: Extract release notes from CHANGELOG.md
+        id: changelog
         run: |
-          cd cue-sdk-sys
-          cargo publish --token ${{ secrets.CRATES_TOKEN }}
+          version="${GITHUB_REF_NAME#v}"
+          # Extract the section for this version (between its ## header and the next ## header)
+          notes=$(awk "/^## \\[v${version}\\]/{found=1; next} /^## \\[/{if(found) exit} found{print}" CHANGELOG.md)
+          # Write to step output using delimiter to handle multiline
+          {
+            echo "notes<<CHANGELOG_EOF"
+            echo "$notes"
+            echo "CHANGELOG_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
         env:
-          CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --notes "${{ steps.changelog.outputs.notes }}"
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Publish to crates.io
+        run: cargo publish --token ${{ secrets.CRATES_TOKEN }}
+        working-directory: cue-sdk-sys

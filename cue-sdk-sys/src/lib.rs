@@ -7,7 +7,7 @@
 #![allow(non_snake_case)]
 #![allow(non_camel_case_types)]
 
-use core::ffi::{c_char, c_int, c_uint, c_uchar, c_void};
+use core::ffi::{c_char, c_int, c_uchar, c_uint, c_void};
 
 // ---- Constants ----
 
@@ -365,8 +365,7 @@ pub struct CorsairSessionDetails {
 }
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
-    ["Size of CorsairSessionDetails"]
-        [::std::mem::size_of::<CorsairSessionDetails>() - 36usize];
+    ["Size of CorsairSessionDetails"][::std::mem::size_of::<CorsairSessionDetails>() - 36usize];
     ["Alignment of CorsairSessionDetails"]
         [::std::mem::align_of::<CorsairSessionDetails>() - 4usize];
     ["Offset of field: CorsairSessionDetails::clientVersion"]
@@ -433,8 +432,7 @@ pub struct CorsairLedPosition {
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of CorsairLedPosition"][::std::mem::size_of::<CorsairLedPosition>() - 24usize];
-    ["Alignment of CorsairLedPosition"]
-        [::std::mem::align_of::<CorsairLedPosition>() - 8usize];
+    ["Alignment of CorsairLedPosition"][::std::mem::align_of::<CorsairLedPosition>() - 8usize];
     ["Offset of field: CorsairLedPosition::id"]
         [::std::mem::offset_of!(CorsairLedPosition, id) - 0usize];
     ["Offset of field: CorsairLedPosition::cx"]
@@ -451,8 +449,7 @@ pub struct CorsairDeviceFilter {
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of CorsairDeviceFilter"][::std::mem::size_of::<CorsairDeviceFilter>() - 4usize];
-    ["Alignment of CorsairDeviceFilter"]
-        [::std::mem::align_of::<CorsairDeviceFilter>() - 4usize];
+    ["Alignment of CorsairDeviceFilter"][::std::mem::align_of::<CorsairDeviceFilter>() - 4usize];
     ["Offset of field: CorsairDeviceFilter::deviceTypeMask"]
         [::std::mem::offset_of!(CorsairDeviceFilter, deviceTypeMask) - 0usize];
 };
@@ -508,10 +505,8 @@ pub union CorsairEventUnion {
 }
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
-    ["Size of CorsairEventUnion"]
-        [::std::mem::size_of::<CorsairEventUnion>() - 8usize];
-    ["Alignment of CorsairEventUnion"]
-        [::std::mem::align_of::<CorsairEventUnion>() - 8usize];
+    ["Size of CorsairEventUnion"][::std::mem::size_of::<CorsairEventUnion>() - 8usize];
+    ["Alignment of CorsairEventUnion"][::std::mem::align_of::<CorsairEventUnion>() - 8usize];
     ["Offset of field: CorsairEventUnion::deviceConnectionStatusChangedEvent"]
         [::std::mem::offset_of!(CorsairEventUnion, deviceConnectionStatusChangedEvent) - 0usize];
     ["Offset of field: CorsairEventUnion::keyEvent"]
@@ -528,8 +523,7 @@ pub struct CorsairEvent {
 const _: () = {
     ["Size of CorsairEvent"][::std::mem::size_of::<CorsairEvent>() - 16usize];
     ["Alignment of CorsairEvent"][::std::mem::align_of::<CorsairEvent>() - 8usize];
-    ["Offset of field: CorsairEvent::id"]
-        [::std::mem::offset_of!(CorsairEvent, id) - 0usize];
+    ["Offset of field: CorsairEvent::id"][::std::mem::offset_of!(CorsairEvent, id) - 0usize];
 };
 
 // SAFETY: See CorsairEventUnion.
@@ -691,16 +685,11 @@ pub struct CorsairLedColor {
 const _: () = {
     ["Size of CorsairLedColor"][::std::mem::size_of::<CorsairLedColor>() - 8usize];
     ["Alignment of CorsairLedColor"][::std::mem::align_of::<CorsairLedColor>() - 4usize];
-    ["Offset of field: CorsairLedColor::id"]
-        [::std::mem::offset_of!(CorsairLedColor, id) - 0usize];
-    ["Offset of field: CorsairLedColor::r"]
-        [::std::mem::offset_of!(CorsairLedColor, r) - 4usize];
-    ["Offset of field: CorsairLedColor::g"]
-        [::std::mem::offset_of!(CorsairLedColor, g) - 5usize];
-    ["Offset of field: CorsairLedColor::b"]
-        [::std::mem::offset_of!(CorsairLedColor, b) - 6usize];
-    ["Offset of field: CorsairLedColor::a"]
-        [::std::mem::offset_of!(CorsairLedColor, a) - 7usize];
+    ["Offset of field: CorsairLedColor::id"][::std::mem::offset_of!(CorsairLedColor, id) - 0usize];
+    ["Offset of field: CorsairLedColor::r"][::std::mem::offset_of!(CorsairLedColor, r) - 4usize];
+    ["Offset of field: CorsairLedColor::g"][::std::mem::offset_of!(CorsairLedColor, g) - 5usize];
+    ["Offset of field: CorsairLedColor::b"][::std::mem::offset_of!(CorsairLedColor, b) - 6usize];
+    ["Offset of field: CorsairLedColor::a"][::std::mem::offset_of!(CorsairLedColor, a) - 7usize];
 };
 
 #[repr(C)]
@@ -727,13 +716,11 @@ pub type CorsairSessionStateChangedHandler = ::std::option::Option<
     unsafe extern "C" fn(context: *mut c_void, eventData: *const CorsairSessionStateChanged),
 >;
 
-pub type CorsairAsyncCallback = ::std::option::Option<
-    unsafe extern "C" fn(context: *mut c_void, error: CorsairError),
->;
+pub type CorsairAsyncCallback =
+    ::std::option::Option<unsafe extern "C" fn(context: *mut c_void, error: CorsairError)>;
 
-pub type CorsairEventHandler = ::std::option::Option<
-    unsafe extern "C" fn(context: *mut c_void, event: *const CorsairEvent),
->;
+pub type CorsairEventHandler =
+    ::std::option::Option<unsafe extern "C" fn(context: *mut c_void, event: *const CorsairEvent)>;
 
 // ---- Extern functions ----
 
