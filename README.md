@@ -1,12 +1,26 @@
-[![PlatformAgnostic-CI](https://github.com/scottroemeschke/cue-sdk-sys/workflows/Platform-Agnostic-CI/badge.svg?branch=master)](https://github.com/scottroemeschke/cue-sdk-sys/actions?query=workflow%3APlatform-Agnostic-CI)
-[![Windows-CI](https://github.com/scottroemeschke/cue-sdk-sys/workflows/.github/workflows/windows_ci.yml/badge.svg)](https://github.com/scottroemeschke/cue-sdk-sys/actions?query=workflow%3AWindows-CI)
-[![MacOS-CI](https://github.com/scottroemeschke/cue-sdk-sys/workflows/MacOS-CI/badge.svg?branch=master)](https://github.com/scottroemeschke/cue-sdk-sys/actions?query=workflow%3AMacOS-CI)
-
-[![GithubRepo](https://img.shields.io/badge/github-scottroemeschke%2Fcue--sdk--sys-darkblue?style=flat)](https://github.com/scottroemeschke/cue-sdk-sys)
+[![CI](https://github.com/scottroemeschke/cue-sdk-sys/actions/workflows/ci.yml/badge.svg)](https://github.com/scottroemeschke/cue-sdk-sys/actions/workflows/ci.yml)
 [![CratesIO](https://img.shields.io/crates/v/cue-sdk-sys)](https://crates.io/crates/cue-sdk-sys)
 [![DocsRS](https://img.shields.io/badge/docs.rs-cue--sdk--sys-blue?style=flat)](https://docs.rs/cue-sdk-sys/latest)
 
-# Repo and Workspace Information
+# cue-sdk-sys
 
-The `cue-sdk-sys` crate is a low-level unsafe Rust bindings to the native [Corsair iCUE SDK](https://github.com/CorsairOfficial/cue-sdk).
-This workspace contains the `cue-sdk-sys` crate itself, and a sanity integration test crate (`sys-test`) that performs a handshake with the SDK.
+Low-level unsafe Rust FFI bindings to the [Corsair iCUE SDK](https://github.com/CorsairOfficial/cue-sdk) v4.
+
+This workspace contains:
+- `cue-sdk-sys/` — the published sys crate
+- `sys-test/` — integration test crate that validates FFI linkage against the native SDK
+
+## Releasing
+
+Releases are triggered by pushing a version tag. The CI workflow will create a GitHub Release (with notes extracted from `CHANGELOG.md`) and publish to crates.io.
+
+```bash
+# Use the helper script:
+./scripts/release.sh 0.1.0
+
+# Or manually:
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+Tag pushes are restricted to the repository owner via GitHub tag protection rules.
